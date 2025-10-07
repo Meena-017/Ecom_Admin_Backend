@@ -1,0 +1,76 @@
+{% extends "website/base.html" %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+<h2>User List</h2>
+
+<!-- Add User Form -->
+<div class="card mb-4">
+    <div class="card-header">Add User</div>
+    <div class="card-body">
+        <form method="POST" action="{% url 'frontend_user_list' %}">
+            {% csrf_token %}
+            <input type="hidden" name="add_user">
+            <div class="row g-2">
+                <div class="col"><input class="form-control" name="username" placeholder="Username" required></div>
+                <div class="col"><input class="form-control" name="email" placeholder="Email" type="email" required></div>
+                <div class="col"><input class="form-control" name="password" placeholder="Password" type="password" required></div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_superuser">
+                        <label class="form-check-label">Superuser</label>
+                    </div>
+                </div>
+                <div class="col"><button class="btn btn-success w-100" type="submit">Add</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- User Table -->
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% if user.is_superuser %}
+                    <span class="status-icon superuser">&#9733; Superuser</span>
+                {% else %}
+                    <span class="status-icon normaluser">&#9679; Normal</span>
+                {% endif %}
+            </td>
+            <td>
+                <!-- Edit -->
+                <form method="POST" action="{% url 'frontend_user_list' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="edit_user">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button class="btn btn-sm btn-primary">Edit</button>
+                </form>
+                <!-- Delete -->
+                <form method="POST" action="{% url 'frontend_user_list' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_user">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No users found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "website/base.html" %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<h2>Your Cart</h2>
+
+{% if items %}
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Subtotal (₹)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in items %}
+        <tr>
+            <td>{{ row.product.name }}</td>
+            <td>{{ row.product.price }}</td>
+            <td>{{ row.quantity }}</td>
+            <td>{{ row.subtotal|floatformat:2 }}</td>
+            <td>
+                <!-- Remove from cart -->
+                <form method="POST" action="{% url 'remove_from_cart' row.product.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        <!-- Continue shopping should point to frontend product list -->
+        <a href="{% url 'frontend_product_list' %}" class="btn btn-secondary">Continue shopping</a>
+    </div>
+    <div>
+        <strong>Total:</strong> ₹{{ total|floatformat:2 }}
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info mt-3">
+    Your cart is empty. 
+    <a href="{% url 'frontend_product_list' %}">Start shopping</a>
+</div>
+{% endif %}
+
+{% endblock %}

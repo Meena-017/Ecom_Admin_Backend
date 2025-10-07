@@ -1,0 +1,30 @@
+{% extends "website/common/base.html" %}
+{% block main_content %}
+
+  <h1>Welcome to the E-Commerce Website</h1>
+  <p>Explore our wide range of products and enjoy shopping!</p>
+      <h1>{{title}}</h1>
+    <h1>{{description}}</h1>
+    <!-- <h1>{{products}}</h1> -->
+    <div class="container py-5">
+    <h1 class="text-center mb-4">Our Products</h1>
+    <div class="row g-4">
+      {% for product in products %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <!-- <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}"> -->
+          <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="fw-bold">₹{{ product.price }}</p>
+            <p class="fw-bold">Stock Left: {{ product.stock }}</p>
+            <a href="#" class="btn btn-primary">Buy Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}  
