@@ -10,3 +10,4 @@ tzdata==2025.2
 gunicorn
 whitenoise
 dj-database-url==2.3.0
+Pillow==10.4.0
